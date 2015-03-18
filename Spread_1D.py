@@ -42,6 +42,11 @@ class Spread_1D(Kilobot):
         self.debug = str(self.id)
         self.toggle_tx()
 
+    def demitour(self, speed):
+        self.speed = speed
+        degrees = self.speed
+        self.orientation =0
+
     """def turn(self):
         self.turnLFoot(5)
         self.x += 1
@@ -67,7 +72,7 @@ class Spread_1D(Kilobot):
                 self.dist = self.msgrx[3]
                 print(self.dist)
                 print("il faut faire demitour")
-                self.ffoot()
+                self.demitour(5)
                                
             
             
