@@ -71,6 +71,13 @@ class KBSimulation:
                                          self.config['height']/2)
                 self.bots[i].orientation = random.uniform(0,360)            
             self.bots[0].orientation = 180 # make first one point left
+            
+        elif formation == "LINE_ORI":
+            for i in range(0,self.config['n']):
+                self.bots[i].pos = Vec2d(self.config['width']/2+i*45, 
+                                         self.config['height']/2)
+                self.bots[i].orientation = 180 
+
 
         elif formation == "LINE2":
             for i in range(0,self.config['n']):
