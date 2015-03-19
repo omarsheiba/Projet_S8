@@ -32,6 +32,8 @@ class Follow(Kilobot):
         self.x = 0
 
         self.var_stop = 0
+        self.var_close = 0
+        self.close_id = 0
         
 
         if (self.id == 0): # the leader
@@ -107,7 +109,7 @@ class Follow(Kilobot):
 
         #Mouvement aleatoire tourner ou avancer
         
-        if self.id == self.msgrx[0]-1 and self.dist <= self.r:
+        if self.id == self.msgrx[0]-1 and self.dist <= self.r-1:
             self.x = 0
             move = self.rand()
             if move < 225:
@@ -140,16 +142,16 @@ class Follow(Kilobot):
 
 
         #Suiveur sortie de mon orbite
-        if self.id == self.msgrx[0] - 1 and self.dist >= self.r and self.var_stop == 0:
+        if self.id == self.msgrx[0] - 1 and self.dist >= self.r and self.var_stop == 0 and self.var_close == 0:
             print"[%d] se stop parceque successeur plus la."%self.id
             if self.msgrx[0] == 2:
-                self.set_color(3,1,2)
+                self.set_color(2,1,2)
             self.var_stop += 1
             self.op=self.stop
 
 
         #Le suiveur est sorti de l'orbite du leader
-        elif self.dist >= self.r and self.var_stop == 0 and self.id == self.msgrx[0] + 1:
+        elif self.dist >= self.r and self.var_stop == 0 and self.var_close == 0:
 
 
             #On tourne a gauche pour suivre le leader
@@ -157,10 +159,10 @@ class Follow(Kilobot):
                 self.op = self.fullCCW
                 self.time += 1
             #On tourne plus longtemps a droite et on avance pour se remettre dans l'axe
-            elif (self.time >= 5 and self.time < 25):
+            elif (self.time >= 5 and self.time < 15):
                 self.op = self.fullCW
                 self.time += 1
-            elif (self.time >= 25 and self.time <30):
+            elif (self.time >= 13 and self.time <15):
                 self.op = self.fullFWRD
                 self.time += 1
             else:
@@ -168,9 +170,8 @@ class Follow(Kilobot):
                     
 
         #Le suiveur est dans l orbite et avance en meme temps que le leader
-        elif self.dist < self.r and self.id == self.msgrx[0] + 1 and self.var_stop == 0:
+        elif self.dist < self.r and self.id == self.msgrx[0] + 1 and self.var_stop == 0 and self.var_close == 0:
 
-            print "[%d] Est la"%self.id
             if self.id == 1:
                 self.set_color(0,3,3)
             elif self.id == 2:
@@ -184,16 +185,17 @@ class Follow(Kilobot):
 
 
 
-            
         #Arret pour ne pas pousser un robot
-        elif (self.id > self.msgrx[0] and self.dist <= 36) and self.var_stop == 0:
+        elif (self.id > self.msgrx[0] and self.dist <= 34) and self.var_stop == 0 and self.var_close == 0:
             print"[%d] se stop parceque trop pret"%self.id
             self.set_color(3,0,0)
-            self.var_stop += 1
+            self.var_close += 1
+            self.close_id = self.msgrx[0]
             self.op=self.stop
 
+        
         #Robot inferieur en mode attente
-        elif self.id < self.msgrx[0] and self.msgrx[1] == 1 and self.var_stop == 0:
+        elif self.id < self.msgrx[0] and self.msgrx[1] == 1 and self.var_stop == 0 and self.var_close == 0:
             self.var_stop += 1
             self.op=self.stop
         
@@ -201,9 +203,16 @@ class Follow(Kilobot):
         elif self.var_stop == 1:
             self.op=self.stop
 
-            if self.id == self.msgrx[0] - 1 and self.dist < self.r:
+            if (self.id == self.msgrx[0] - 1 and self.dist < self.r):
                 self.var_stop -= 1
+
+        elif self.var_close == 1:
+            self.op=self.stop
+
+            if self.dist < 36 and self.msgrx[0] == self.close_id:
+                self.var_close -= 1
 
         self.op()
         print "[%d] self var_stop = %d" %(self.id,self.var_stop)
         self.PC -= 2
+
