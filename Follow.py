@@ -150,7 +150,7 @@ class Follow(Kilobot):
             self.op=self.stop
 
 
-        #Le suiveur est sorti de l'orbite du leader
+        #Je suis sorti de l'orbite du leader
         elif self.dist >= self.r and self.var_stop == 0 and self.var_close == 0:
 
 
@@ -169,7 +169,7 @@ class Follow(Kilobot):
                 self.time = 0
                     
 
-        #Le suiveur est dans l orbite et avance en meme temps que le leader
+        #Je suis dans l orbite et j'avance en meme temps que le leader
         elif self.dist < self.r and self.id == self.msgrx[0] + 1 and self.var_stop == 0 and self.var_close == 0:
 
             if self.id == 1:
