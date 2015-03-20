@@ -30,7 +30,7 @@ class Spread_1D(Kilobot):
             self.set_color(0,0,3)
             self.program = [self.getX,
                             self.activate,
-                            self.loop,                         
+                            self.loop2,                         
                             ]
 
     ##
@@ -47,32 +47,25 @@ class Spread_1D(Kilobot):
         degrees = self.speed
         self.orientation =0
 
-    """def turn(self):
-        self.turnLFoot(5)
-        self.x += 1
-        if (self.x < 10):
-            self.PC -= 1 """
 
-    """def go(self):
-        self.fullFWRD()
-        self.x -= 1
-        if (self.x > 0):
-            self.PC -= 1 """
     def getX(self):
         self.wait()
         print("en attente")
         self.get_message()
         if (self.msgrx[5] != 1):
             print("le message na pas ete get")
-            self.fullFWRD()
+            self.op=self.fullFWRD
             #if (self.msgrx[3] < self.r):
+            self.op()
             self.PC -= 1 
         else:
             if(self.msgrx[3]<69):
                 self.dist = self.msgrx[3]
                 print(self.dist)
                 print("il faut faire demitour")
+                self.clear_rxbuf()
                 self.demitour(5)
-                               
-            
+                if self.msgrx[3]<=69:
+                    self.midFWRD()               
+                
             
