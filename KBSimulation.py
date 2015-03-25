@@ -68,23 +68,18 @@ class KBSimulation:
         elif formation == "LINE":
             for i in range(0,self.config['n']):
                 self.bots[i].pos = Vec2d(self.config['width']/2 + i*34, 
-                                         self.config['height']/2)
+                                         400)
                 self.bots[i].orientation = random.uniform(0,360)            
             self.bots[0].orientation = 180 # make first one point left
-            
-        elif formation == "LINE_ORI":
-            for i in range(0,self.config['n']):
-                self.bots[i].pos = Vec2d(self.config['width']/2+i*45, 
-                                         self.config['height']/2)
-                self.bots[i].orientation = 180 
-
 
         elif formation == "LINE2":
-            for i in range(0,self.config['n']):
-                self.bots[i].pos = Vec2d(random.uniform((i)*100,(i)*200), 
-                                         self.config['height']/2)
+            for i in range(2,self.config['n']):
+                self.bots[i].pos = Vec2d(random.randint((i-1)*((750)/self.config['n']),i*((750)/self.config['n'])),self.config['height']/2)
                 self.bots[i].orientation = 180            
             self.bots[0].orientation = 180 # make first one point left
+            self.bots[0].pos = Vec2d(0,self.config['height']/2)
+            self.bots[1].orientation = 180
+            self.bots[1].pos = Vec2d(10+random.randint(0,750/self.config['n']-10),self.config['height']/2)
 
         elif formation == "CIRCLE":
             deg = 360 / (self.config['n'])
