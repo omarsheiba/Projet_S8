@@ -90,7 +90,28 @@ class KBSimulation:
                 b.orientation = random.uniform(0,360)
                 b.pos = Vec2d(self.config['width'] / 2, self.config['height'] / 2) 
                 b.pos += Vec2d(0, radius).rotated(deg*i)
+        
+        
+        elif formation == "CIRCLE2":
+            deg = 360 / (self.config['n'])
+            pi = 3.141592653589793
+            radius = (self.bots[0].radius * (self.config['n'] + 5)) / pi
 
+            self.bots[0].pos = Vec2d(self.config['width'] / 2, self.config['height'] / 2) 
+	    k=0
+	    
+	    for i in range(1,self.config['n']):
+		 k =k+1
+            for i in range(1,self.config['n']):
+
+		 
+		 self.bots[i].orientation = 90 + i*(360/k)
+		 self.bots[i].pos = Vec2d(self.config['width'] / 2, self.config['height'] / 2) 
+		
+		 self.bots[i].pos += Vec2d(1, radius).rotated(deg*i)
+        
+        
+        
         else:
             print "Unknown formation '%s' - aborting." % (formation)
             exit(-42)           
