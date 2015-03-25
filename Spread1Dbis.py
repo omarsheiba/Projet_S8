@@ -29,8 +29,7 @@ class Spread_1D(Kilobot):
        
         else: # others
             self.set_color(0,0,3)
-            self.program = [self.moveL,
-                            self.loop1,                         
+            self.program = [self.moveL,                         
                             ]
 
     ##
@@ -42,9 +41,7 @@ class Spread_1D(Kilobot):
         self.debug = str(self.id)
         self.toggle_tx()
 
-    def demitour(self, speed):
-        self.speed = speed
-        degrees = self.speed
+    def demitour(self):
         self.orientation =0
 
     """def turn(self):
@@ -81,8 +78,17 @@ class Spread_1D(Kilobot):
 
         
     def moveL(self): 
-        if(floor(self.pos[0])!=(self.id)*70):
-            self.set_motor(64,64)
-            
+        for i in range (1,self.sim.config['n']):
+            if floor(self.pos[0])<floor(self.id*(750)/(self.sim.config['n'])):
+                self.demitour()
+                self.set_motor(64,64)
+                self.PC-=1
+            if floor(self.pos[0])>self.id*(750)/(self.sim.config['n']):
+                self.set_motor(64,64)
+                print("trop tard")
+                self.PC-=1
+
+
         else:
-            print("my id is""and my position is",self.id,self.pos)
+            print("my id is",self.id,"and my position is",self.pos)
+                        
