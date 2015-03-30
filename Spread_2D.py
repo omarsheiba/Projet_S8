@@ -20,12 +20,15 @@ class Spread_1D(Kilobot):
         self.dist = 0
         self.timeout = 0
 
-        self.program=[self.moveL]
+        self.program=[self.moveL,
+        self.printa]
 
     ##
     ## Func
     ##
      
+    def printa(self):
+        print("my id is",self.id,"and my position is",self.pos)
     def activate(self):
         self.message_out(self.id, 0, 0)
         self.debug = str(self.id)
@@ -38,30 +41,35 @@ class Spread_1D(Kilobot):
 
         
     def moveL(self): 
-        for i in range (0,self.sim.config['n']):
-            if floor(self.pos[0])<floor(self.id*(750)/(self.sim.config['n'])):
-                self.demitour()
+        if self.id !=0 and floor(self.pos[0])<floor(self.id*(750)/(self.sim.config['n'])):
+            self.demitour()
+            self.set_motor(64,64)
+            self.PC-=1
+        if self.id != 0 and floor(self.pos[0])>self.id*(750)/(self.sim.config['n']):
+            if self.orientation ==180:
                 self.set_motor(64,64)
+                print("trop tard",self.pos)
                 self.PC-=1
-            if floor(self.pos[0])>self.id*(750)/(self.sim.config['n']):
-                self.set_motor(64,64)
-                print("trop tard")
-                self.PC-=1
-            if floor(self.pos[0])==self.id*(750)/(self.sim.config['n']):
-                for i in range (0,self.sim.config['n']):
-                    if self.id==i:
-                        if i ==0: 
-                            self.quartdetour()
-                            self.set_motor(64,64)
-                        if i % 2 ==0:
-                            self.quartdetour()
-                            self.set_motor(64,64)
-                        else:
-                            self.troisquartdetour()
-                            self.set_motor(64,64)
-                self.PC-=1
-            if floor(self.pos[1])==524 or floor(self.pos[1])==35:
+        if (floor(self.pos[0])==self.id*(750)/(self.sim.config['n']) or self.pos[0]==16):
+            if (floor(self.pos[1])==150 or floor(self.pos[1])==450):
                 self.stop()
-            else:            
-                print("my id is",self.id,"and my position is",self.pos)
-                        
+                return
+            for i in range (0,self.sim.config['n']):
+                if self.id==i:
+                    if i ==0: 
+                        self.quartdetour()
+                        self.fullFWRD
+                        print(self.pos)
+                    if i % 2 ==0 and i>0:
+                        self.quartdetour()                   
+                        while(self.pos[1]>100):
+                            self.set_motor(64,64)
+                            print(self.pos)
+                    else:
+                        self.troisquartdetour()
+                        self.set_motor(64,64)
+            self.PC-=1
+
+        else:   
+            self.stop()        
+            return
