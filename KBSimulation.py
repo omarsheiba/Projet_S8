@@ -79,7 +79,7 @@ class KBSimulation:
             self.bots[0].orientation = 180 # make first one point left
             self.bots[0].pos = Vec2d(0,self.config['height']/2)
             self.bots[1].orientation = 180
-            self.bots[1].pos = Vec2d(10+random.randint(0,750/self.config['n']-10),self.config['height']/2)
+            self.bots[1].pos = Vec2d(30+random.randint(0,750/self.config['n']-30),self.config['height']/2)
 
         elif formation == "CIRCLE":
             deg = 360 / (self.config['n'])
