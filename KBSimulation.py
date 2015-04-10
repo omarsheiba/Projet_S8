@@ -64,7 +64,23 @@ class KBSimulation:
                 b.orientation = random.uniform(0,360)
                 b.pos = Vec2d(random.uniform(yunit, 3*yunit), 
                               random.uniform(xunit, 3*xunit))
-
+	
+	elif formation == "LINE4":
+            for i in range(0,11):
+                self.bots[i].orientation = 180
+            self.bots[0].pos = Vec2d(0,self.config['height']/2)
+            self.bots[1].pos = Vec2d(90,self.config['height']/2-18)
+            self.bots[2].pos = Vec2d(160,self.config['height']/2)
+            self.bots[3].pos = Vec2d(250,self.config['height']/2-18)
+            self.bots[4].pos = Vec2d(310,self.config['height']/2)
+            self.bots[5].pos = Vec2d(385,self.config['height']/2-18)
+            self.bots[6].pos = Vec2d(425,self.config['height']/2)
+            self.bots[7].pos = Vec2d(520,self.config['height']/2-18)b
+            self.bots[8].pos = Vec2d(575,self.config['height']/2)
+            self.bots[9].pos = Vec2d(630,self.config['height']/2-18)
+            self.bots[10].pos = Vec2d(695,self.config['height']/2)
+            self.bots[11].pos = Vec2d(450,32) 
+            
         elif formation == "LINE":
             for i in range(0,self.config['n']):
                 self.bots[i].pos = Vec2d(self.config['width']/2 + i*34, 
