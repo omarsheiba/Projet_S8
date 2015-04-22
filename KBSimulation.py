@@ -75,11 +75,25 @@ class KBSimulation:
             self.bots[4].pos = Vec2d(310,self.config['height']/2)
             self.bots[5].pos = Vec2d(385,self.config['height']/2-18)
             self.bots[6].pos = Vec2d(425,self.config['height']/2)
-            self.bots[7].pos = Vec2d(520,self.config['height']/2-18)b
+            self.bots[7].pos = Vec2d(520,self.config['height']/2-18)
             self.bots[8].pos = Vec2d(575,self.config['height']/2)
             self.bots[9].pos = Vec2d(630,self.config['height']/2-18)
             self.bots[10].pos = Vec2d(695,self.config['height']/2)
             self.bots[11].pos = Vec2d(450,32) 
+            
+        elif formation == "LINE3":
+            xunit = self.config['width'] / 5
+            yunit = self.config['height'] / 5
+            for i in range(2,self.config['n']-1):
+                self.bots[i].pos = Vec2d(random.randint((i-1)*((750)/self.config['n']),i*((750)/self.config['n'])),self.config['height']/2)
+                self.bots[i].orientation = 180            
+            self.bots[0].orientation = 180 # make first one point left
+            self.bots[0].pos = Vec2d(0,self.config['height']/2)
+            self.bots[1].orientation = 180
+            self.bots[1].pos = Vec2d(30+random.randint(0,750/self.config['n']-30),self.config['height']/2)    
+            self.bots[self.config['n']-1].pos = Vec2d(450,32)
+            
+        
             
         elif formation == "LINE":
             for i in range(0,self.config['n']):
