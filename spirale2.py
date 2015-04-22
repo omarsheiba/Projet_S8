@@ -1,4 +1,4 @@
-### Simulation ## ./launch -n 8 -p Bots/spirale3.py -f CIRCLE2 
+### Simulation ## ./launch -n 8 -p Bots/spirale2.py -f CIRCLE2
 
 from Kilobot import *
 
@@ -37,50 +37,62 @@ class Test(Kilobot):
 	    self.set_color(3,3,0)
             self.program = [self.setmsg,
 			    #self.activate,
+			    #self.toggle_tx,
+			    self.hearbarrier,
+			    #self.toggle_g,
+			    self.loop2
+                            ]
+	elif (self.id == 1): # the leader, the first violin
+	    self.set_color(3,3,0)
+            self.program = [self.setmsg,
+			    #self.activate,
 			    self.toggle_tx,
 			    self.hearbarrier,
 			    #self.toggle_g,
-			    self.loop
+			    self.loop2
                             ]
 
+
+	
+	
 
 
         else:
             self.set_color(3,3,3)
             self.program = [self.setmsg,
-                            self.toggle_tx,
+                            self.initial,
+                            #self.toggle_tx,
                             self.getX,
                             #self.CCW,
 			    self.FWRD,
 			    #self.APS,
-			    #self.initial,
-			    self.doSpiral,
-			    #self.hearbarrier,
-                            #self.toggle_g,
+                            self.doSpiral,
+                            self.hearbarrier,                           			    
+			    self.timer,
+                            self.toggle_r,
                             self.loop2
                             ]
+
 
 
     ##
     ## Func
     ##
-     
-   
+
+
 
     def setmsg(self):
         self.message_out(0x10,0x20,0x30) # note that the last one gets masked to 0xFE
 
 
-    def activateL(self):
-        self.id = 0
-        print "0 assumes position as 0"
-        self.debug = "S:0"
-        self.message_out(0,0,GO)
-        self.toggle_tx()
-        self.set_color(0,3,0)
-        return self.goto(self.hold)
 
-    
+
+    def timer(self):
+	print"azazaz"
+        if self.timee > 1200:
+            self.PC -= 2
+            self.timee +=1 
+        
 
     def activate(self):
         self.message_out(self.id, 0, 0	)
@@ -90,18 +102,8 @@ class Test(Kilobot):
 
 
 
-    def hearbarrier(self):
-	print"hear"
-        data = distance = 0
-        self.get_message()
-        if (self.msgrx[5] == 1):
-            self.var_data = [self.msgrx[0], self.msgrx[1], self.msgrx[2]]
-            self.var_distance = self.msgrx[3]
-        else:
-            self.PC -= 2
-
-
     def initial(self):
+        self.timee= 0
 	self.spiral = 0
 	self.count = 0
 	self.scount = 0
@@ -129,65 +131,33 @@ class Test(Kilobot):
             return
         self.PC -= 1       
         
-    def CCW(self):
 
-
-        if(self.time < 20):
-            self.x = 0
-            move = self.rand()
-            
-            self.fullCCW()  #Changeable en self.fullCW()
-	    print "CCW"
-            self.time += 1
-            self.op()
-        
-            self.PC -= 2
 
     def FWRD(self):
 
         
-        if(self.timeFWRD < 20):
+        if(self.timeFWRD < 40):
             self.x = 0
             move = self.rand()
             
             self.midFWRD()  
-	    print "FWD"
+	   
             self.timeFWRD += 1
             self.op()
         
             self.PC -= 2
 
-    def APS(self):
-	print"A"
-
-        if(self.time1< 20):
-	    print"C"
-            self.x = 0
-            move = self.rand()
-            
-            self.fullCCW()  #Changeable en self.fullCW()
-
-            self.time1 += 1
-            self.op()
-        
-            self.PC -= 2
 
 
-        
-        elif(self.timeFWRD1 < 20):
-	    print"F"
-            self.x = 0
-            move = self.rand()
-            
-            self.midFWRD()  #Changeable en self.fullCW()
 
-            self.timeFWRD1 += 1
-            self.op()
-        
-            self.PC -= 2
+
 
     def doSpiral(self): # spiral towards the swarm; turn, forward or finish
-	print"spiral"
+        self.timee +=1 
+	#print(self.timee)
+	if self.timee > 1000:
+            self.PC += 3
+	
         self.scount += 1
 	self.toggle_g
         if (self.scount < TURN):
@@ -208,40 +178,20 @@ class Test(Kilobot):
 	    self.scount = 0
             self.spiral += 3
 
-    def setmsg(self):
-        self.message_out(0x10,0x20,0x30) # note that the last one gets masked to 0xFE
+
 
 
     def hearbarrier(self):
-	print"hearrr"
+	
         data = distance = 0
         self.get_message()
 	#if(self.id == 2):
         if (self.msgrx[5] == 1):
+	    print("Le robot %d a trouve un tresor apres %d "%(self.id,self.timee))
             self.var_data = [self.msgrx[0], self.msgrx[1], self.msgrx[2]]
             self.var_distance = self.msgrx[3]
+
         else:
-            self.PC -= 2
+            self.PC -= 3
 	#else:
 	    #self.PC -=2
-
-    def hold(self):
-        self.PC -= 1
-        self.get_message()
-        if (self.msgrx[5] == 1):
-
-            heard = self.msgrx[0]
-            top   = self.msgrx[1]
-            mode  = self.msgrx[2]
-            dist  = self.msgrx[3]
-
-            if (top > self.top): # to help others, all of the swarm shouts the top
-                self.top = top
-                self.message_out(self.id, self.top, mode)
-
-            if (mode == DONE): # finish trigger
-                self.enable_tx()
-                self.message_out(self.id, self.top, DONE)
-                self.set_color(0,3,0)
-
-            self.reset_rx()
