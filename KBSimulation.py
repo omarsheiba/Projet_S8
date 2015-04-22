@@ -123,22 +123,32 @@ class KBSimulation:
         
         
         elif formation == "CIRCLE2":
-            deg = 360 / (self.config['n'])
+	    xunit = self.config['width'] / 5
+            yunit = self.config['height'] / 5
+            
             pi = 3.141592653589793
             radius = (self.bots[0].radius * (self.config['n'] + 5)) / pi
 
             self.bots[0].pos = Vec2d(self.config['width'] / 2, self.config['height'] / 2) 
+            self.bots[1].pos = Vec2d(self.config['width'] / 2 + 250, self.config['height'] / 2 + 200)
+            #self.bots[2].pos = Vec2d(self.config['width'] / 2 + 250, self.config['height'] / 2 - 150)
+            #self.bots[3].pos = Vec2d(self.config['width'] / 2 - 250, self.config['height'] / 2 + 200)
+            #self.bots[4].pos = Vec2d(self.config['width'] / 2 - 250, self.config['height'] / 2 - 150)
+
 	    k=0
 	    
-	    for i in range(1,self.config['n']):
+	    for i in range(2,self.config['n']):
 		 k =k+1
-            for i in range(1,self.config['n']):
-
+	    deg = 360 / k
+            for i in range(2,self.config['n']):
 		 
 		 self.bots[i].orientation = 90 + i*(360/k)
 		 self.bots[i].pos = Vec2d(self.config['width'] / 2, self.config['height'] / 2) 
 		
-		 self.bots[i].pos += Vec2d(1, radius).rotated(deg*i)
+		 self.bots[i].pos += Vec2d(1, radius).rotated(deg*i) 
+	    
+	    #self.bots[3].pos =Vec2d(random.uniform(yunit, 4*yunit), 
+                                    #random.uniform(xunit, 4*xunit))   
         
         
         
